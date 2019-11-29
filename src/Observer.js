@@ -53,13 +53,13 @@ function defineReactive(obj, key, val) {
 		enumerable: true,
 		configurable: true,
 		get() {
-            dep.depend();
-            if (childOb) {
-                childOb.dep.depend();
-                if (Array.isArray(val)) {
-                    dependArray(val);
-                }
-            }
+			dep.depend();
+			if (childOb) {
+				childOb.dep.depend();
+				if (Array.isArray(val)) {
+					dependArray(val);
+				}
+			}
 			return val;
 		},
 		set(newVal) {
@@ -70,11 +70,14 @@ function defineReactive(obj, key, val) {
 	});
 }
 
-function dependArray(value) {
-    console.log('#', value);
-    // value.forEach(v => {
-    //     v.__ob__.dep.depend();
-    // });
+function dependArray(array) {
+	array.forEach(val => {
+		val && val.__ob__ && val.__ob__.dep.depend();
+
+		if (Array.isArray(val)) {
+			dependArray(val);
+		}
+	});
 }
 
 export default Observer;
